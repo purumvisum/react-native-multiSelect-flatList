@@ -1,12 +1,12 @@
 {
-  "name": "testnpm",
+  "name": "react-native-multiselect-flatlist",
   "version": "1.0.0",
-  "description": "testNpm to test",
+  "description": "Availiable multiselect with menu on long tap on FlatList item",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Daria Ivanovich",
   "license": "ISC",
   "dependencies": {
     "react-native-vector-icons": "4.0.0"
