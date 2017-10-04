@@ -10,5 +10,5 @@
   "license": "ISC",
   "dependencies": {
     "react-native-vector-icons": "4.0.0"
-  },
+  }
 }
