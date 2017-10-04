@@ -1,75 +1,37 @@
 import React, { Component } from 'react';
+import { TouchableOpacity, Text, View } from 'react-native';
+import { Button, Container, Badge } from 'native-base';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import {
-    TouchableOpacity,
-    Animated,
-    View
-} from 'react-native';
-
 import styles from './styles';
 
-export default class EditablieFlatListItem extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            id: this.props.id,
-            selected: this.props.selected // turn on long tap
-        };
-
-        this._onPress = this._onPress.bind(this);
-    }
-
-    componentDidMount() {
-        this.props.onRef(this);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            selected: nextProps.selected
-        });
-    }
-
-    _onPress() {
-        this.setState({
-            selected: !this.state.selected
-        });
-
-        return false;
-    }
+class ActionsBarItem extends Component {
 
     render() {
         return (
             <TouchableOpacity
-                onLongPress = { this.props.onLongPress }
-                onPress = { this.props.editingMode ? this.props.onPress.bind(this.state.id) : this.props.onRowClick }>
-                <View style = { styles.itemRow }>
+                style = {styles.actionBarItem}
+                onPress= {this.props.onPress}
+            >
+                {
+                    this.props.iconName &&
+                    <Icon
+                        style = {styles.actionBarItemIcon}
+                        name={this.props.iconName} />
+                }
+                {
+                    this.props.text &&
+                    <Text
+                        style = {[styles.actionBarItemText, this.props.style]}>
+                        {this.props.text}
+                    </Text>
+                }
 
-                    <Animated.View
-                        style = { [
-                            {
-                                width: this.props.iconSize,
-                                height: this.props.iconSize,
-                                marginLeft: this.props.editingMode ? 16 : 0
-                            },
-                            this.props.iconStyles,
-                            styles.itemIconContainer,
-                            this.state.selected ? styles.itemIconContainerChecked : null
-                        ] }>
-                        <Icon
-                            name = { 'done' }
-                            style = { styles.itemIcon } />
-                    </Animated.View>
-
-                    <View style = { styles.itemRowTextContainer }>
-                        {this.props.renderRow}
-                    </View>
-
-                </View>
             </TouchableOpacity>
-        );
-    }
-}
 
+        );
+    };
+};
+
+export default ActionsBarItem;
