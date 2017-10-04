@@ -1,0 +1,14 @@
+{
+  "name": "testnpm",
+  "version": "1.0.0",
+  "description": "testNpm to test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react-native-vector-icons": "4.0.0"
+  },
+}
