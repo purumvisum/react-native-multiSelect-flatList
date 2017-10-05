@@ -1,6 +1,9 @@
 # react-native-multiSelect-flatList
 > A simple RN component that can search, open edit block with abilities to select all item, remove selected with animations
 
+![Demo](https://github.com/purumvisum/react-native-multiSelect-flatList/blob/master/ice_video_20171005-112420.gif)
+
+
 # Instalation
 `npm install https://github.com/purumvisum/react-native-multiSelect-flatList`
 
