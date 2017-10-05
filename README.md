@@ -39,7 +39,7 @@ Set item sorting field
 Set item oreder field
 ### `renderRow`
 Allow to use your styles and set content of items in row. 
-> Do not use TouchableOpacity and TouchableHighlight. renderItem method of FlatList already rewrited by module and using touchable elemnts can cancel modle events  
+> Do not use TouchableOpacity, TouchableWithoutFeedback and TouchableHighlight. renderItem method of FlatList already rewrited by module and using touchable elemnts can cancel modle events. To make from EditableFlatList simple FlatList wrap your items to TouchableOpacity, TouchableWithoutFeedback and TouchableHighlight (it will canceled all events).   
 ### `clickOnRow`
 Allow to add your custom event on row press. It will be canceled whet editing mode is on.
 ### `removeRow`
