@@ -20,6 +20,10 @@ import EditablieFlatList from 'react-native-multiselect-flatlist';
     clickOnRow = {this._selectSession.bind(this)}
     removeRow={this._exitOrRemoveSession.bind(this)}
     onRefresh={this.props.updateSessions}
+    iconWidth = {40}
+    iconStyles = {{
+         marginLeft: 0
+     }}
  />
 ```
 
@@ -41,3 +45,7 @@ Allow to add your custom event on row press. It will be canceled whet editing mo
 Allow to add remove action for list items. 
 ### `onRefresh`
 Allow to add refresh action for list items. 
+### `iconWidth`
+Size of icon (when select item). 
+### `iconStyles`
+Extra styles for icon. 
