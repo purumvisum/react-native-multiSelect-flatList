@@ -1,21 +1,20 @@
 import React from 'react';
 
-import EditablieFlatListItem from './editableFlatListItem';
-import ActionsBar from './actionsBar';
-
-import { NativeAppEventEmitter } from 'react-native';
+import EditableFlatListItem from '../editableFlatList/editableFlatListItem';
+import ActionsBar from '../editableFlatList/actionsBar';
 
 import {
     Animated,
     FlatList,
     View,
-    Alert
+    Alert,
+    Text
 } from 'react-native';
 
 import styles from './styles';
 import SearchBar from './searchBar';
 
-export default class EditablieFlatList extends React.Component {
+export default class EditableFlatList extends React.Component {
 
     constructor(props) {
         super(props);
@@ -33,6 +32,7 @@ export default class EditablieFlatList extends React.Component {
             searchText: ''
         };
 
+        this._sortItems = this._sortItems.bind(this);
         this._editModeOn = this._editModeOn.bind(this);
         this._renderItemComponent = this._renderItemComponent.bind(this);
         this._editingModeOff = this._editingModeOff.bind(this);
@@ -44,6 +44,10 @@ export default class EditablieFlatList extends React.Component {
 
     }
 
+    componentWillMount() {
+        this._sortItems();
+    }
+
     componentDidMount() {
         this.state.topSearchBarAnimation.setValue(this.state.searchBarHeight);
     }
@@ -51,9 +55,15 @@ export default class EditablieFlatList extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.setState({
             itemsList: nextProps.itemsList
-        });
+        }, this._sortItems());
     }
 
+    /**
+     * Turn On editing mode on items long press and select current item
+     *
+     * @param {string} itemId - id of pressed item
+     * @returns {void}
+     */
     _editModeOn(itemId) {
         this.setState({
             editingMode: true
@@ -80,6 +90,11 @@ export default class EditablieFlatList extends React.Component {
         ]).start();
     }
 
+    /**
+     * Turn Off editing mode (Press 'cancel' button)
+     *
+     * @returns {void}
+     */
     _editingModeOff() {
         this.setState({
             editingMode: false,
@@ -110,6 +125,11 @@ export default class EditablieFlatList extends React.Component {
         ]).start();
     }
 
+    /**
+     * Mark all items as selected
+     *
+     * @returns {void}
+     */
     _onselectAll() {
 
         const selectedItemList = this.state.itemsList;
@@ -129,6 +149,12 @@ export default class EditablieFlatList extends React.Component {
         }
     }
 
+    /**
+     * Mark one item as selected
+     *
+     * @param {string} itemId - id of pressed item
+     * @returns {void}
+     */
     _selectItem(itemId) {
 
         const selectedItemList = this.state.itemsList;
@@ -147,6 +173,11 @@ export default class EditablieFlatList extends React.Component {
 
     }
 
+    /**
+     * Remove selected rows one by one
+     *
+     * @returns {void}
+     */
     _onRemoveRow() {
 
         Alert.alert('All selected items will be permanently deleted. Are you sure?', null,
@@ -169,15 +200,27 @@ export default class EditablieFlatList extends React.Component {
 
     }
 
+    /**
+     * Default FlatList function that called on page refresh
+     *
+     * @returns {void}
+     */
     _onRefresh() {
         this.setState({ refreshing: true });
         this.props.onRefresh()
             .catch(error => console.warn('Refresh error', error))
             .then(() => {
+                this._sortItems();
                 this.setState({ refreshing: false });
             });
     }
 
+    /**
+     * Search by seted attribute
+     *
+     * @param {string} text - id of pressed item
+     * @returns {void}
+     */
     _onSearchTextChange(text) {
         this.setState({
             searchText: text.text
@@ -199,6 +242,11 @@ export default class EditablieFlatList extends React.Component {
         );
     }
 
+    /**
+     * Clean search criteria
+     *
+     * @returns {void}
+     */
     _onCleanSearch() {
         this.setState({
             searchText: ' ',
@@ -206,15 +254,49 @@ export default class EditablieFlatList extends React.Component {
         });
     }
 
+    /**
+     * Sort by seted attribute
+     *
+     * @returns {void}
+     */
+    _sortItems () {
+        const compare = this.props.orderBy ? (a, b) => {
+            const propA = this.props.orderBy(a);
+            const propB = this.props.orderBy(b);
+
+            if (propA > propB) {
+                return 1;
+            }
+            if (propA < propB) {
+                return -1;
+            }
+
+            return 0;
+        } : () => 0;
+
+        const orderedData = this.props.itemsList
+            .sort(compare);
+
+        this.setState({
+            itemsList: orderedData
+        });
+    }
+
+    /**
+     * List row function
+     *
+     * @param {string} item - id of item
+     * @returns {ReactElement|null}
+     */
     _renderItemComponent = ({ item }) => 
-        (<EditablieFlatListItem
+        (<EditableFlatListItem
             id = { item.Id }
             selected = { item.selected }
             height = { this.state.iconWidth + 15 }
             selectAll = { this.state.selectAll }
             iconSize = { this.state.iconSize }
-            onLongPress = { () => this._editModeOn(item.Id) }
-            onPress = { () => this._selectItem(item.Id) }
+            onLongPress = { !this.props.preventSelectingActions ? () => this._editModeOn(item.Id) : () => true }
+            onPress = { !this.props.preventSelectingActions ? () => this._selectItem(item.Id) : () => true }
             onRowClick = { () => this.props.clickOnRow(item) }
             onRef = { ref => this.listItem = ref }
             editingMode = { this.state.editingMode }
@@ -225,26 +307,35 @@ export default class EditablieFlatList extends React.Component {
         return (
             <View
                 style = { styles.editableFlatListWrapper } >
-                {
-                    this.props.searchBy && <SearchBar
-                        searchAction = { this._onSearchTextChange }
-                        cleanSearch = { this._onCleanSearch }
-                        searchText = { this.state.searchText }
-                        topSearchBarAnimation = { this.state.topSearchBarAnimation } />
+                { this.props.searchBy
+                && <SearchBar
+                    searchAction = { this._onSearchTextChange }
+                    cleanSearch = { this._onCleanSearch }
+                    searchText = { this.state.searchText }
+                    topSearchBarAnimation = { this.state.topSearchBarAnimation } />
                 }
+
                 <ActionsBar
                     cancel = { this._editingModeOff }
                     selectAll = { this._onselectAll }
                     remove = { this._onRemoveRow }
                     topActionBarAnimation = { this.state.topActionBarAnimation } />
-                <FlatList
+
+                { this.props.itemsList.length > 0
+                && <FlatList
                     style = { styles.editableFlatList }
                     extraData = { this.state }
                     keyExtractor = { this.props.keyExtractor }
                     data = { this.state.itemsList }
                     onRefresh = { this._onRefresh }
                     refreshing = { this.state.refreshing }
-                    renderItem = { this._renderItemComponent } />
+                    renderItem = { this._renderItemComponent } />}
+                { this.props.itemsList.length < 1
+                && <View style = { styles.emptyEditableFlatList } >
+                    <Text style = { styles.emptyEditableFlatListText }>
+                        {this.props.emptyListText || 'No Items' }
+                    </Text>
+                    </View>}
             </View>
         );
     }

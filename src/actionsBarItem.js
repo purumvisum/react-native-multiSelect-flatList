@@ -10,26 +10,25 @@ class ActionsBarItem extends Component {
 
     render() {
         return (
-            <TouchableOpacity
-                style = {styles.actionBarItem}
-                onPress= {this.props.onPress}
-            >
-                {
-                    this.props.iconName &&
-                    <Icon
-                        style = {styles.actionBarItemIcon}
-                        name={this.props.iconName} />
-                }
-                {
-                    this.props.text &&
-                    <Text
-                        style = {[styles.actionBarItemText, this.props.style]}>
-                        {this.props.text}
-                    </Text>
-                }
+                <TouchableOpacity
+                    style = {styles.actionBarItem}
+                    onPress= {this.props.onPress}
+                >
+                    {
+                        this.props.iconName &&
+                        <Icon
+                            style = {styles.actionBarItemIcon}
+                            name={this.props.iconName} />
+                    }
+                    {
+                        this.props.text &&
+                        <Text
+                            style = {[styles.actionBarItemText, this.props.style]}>
+                            {this.props.text}
+                        </Text>
+                    }
 
-            </TouchableOpacity>
-
+                </TouchableOpacity>
         );
     };
 };

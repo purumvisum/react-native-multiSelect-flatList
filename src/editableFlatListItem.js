@@ -10,7 +10,7 @@ import {
 
 import styles from './styles';
 
-export default class EditablieFlatListItem extends Component {
+export default class EditableFlatListItem extends Component {
 
     constructor(props) {
         super(props);

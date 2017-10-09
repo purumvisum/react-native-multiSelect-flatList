@@ -9,6 +9,19 @@ export default ({
         flex: 1
     },
 
+    emptyEditableFlatList: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        marginTop: 20,
+    },
+
+    emptyEditableFlatListText: {
+        fontSize: 15,
+        color: '#393939',
+    },
+
     itemRow: {
         borderBottomColor: '#eee',
         borderColor: 'transparent',
