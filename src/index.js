@@ -1,7 +1,7 @@
 import React from 'react';
 
-import EditableFlatListItem from '../editableFlatList/editableFlatListItem';
-import ActionsBar from '../editableFlatList/actionsBar';
+import EditableFlatListItem from './editableFlatListItem';
+import ActionsBar from './actionsBar';
 
 import {
     Animated,
