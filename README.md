@@ -9,9 +9,9 @@
 
 ## Usage
 ```javascript
-import EditablieFlatList from 'react-native-multiselect-flatlist';
+import EditableFlatList from 'react-native-multiselect-flatlist';
    
-<EditablieFlatList
+<EditableFlatList
     itemsList={this.props.sessions}
     keyExtractor={(item, index) => item.Id}
     searchBy={(item) => item.Description}
